@@ -1,0 +1,27 @@
+name: Docker Compose Build Check
+
+on:
+  pull_request:
+    paths:
+      - docker-compose.yml
+      - .github/workflows/compose-build.yml
+  push:
+    branches:
+      - main
+    paths:
+      - docker-compose.yml
+      - .github/workflows/compose-build.yml
+
+jobs:
+  compose-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate compose file
+        run: docker compose -f docker-compose.yml config --quiet
+
+      - name: Build services (no-op for image-only services)
+        run: docker compose -f docker-compose.yml build --pull
