@@ -11,7 +11,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - loki
-      - mimir
+      - prometheus
       - tempo
     volumes:
       - grafana-data:/var/lib/grafana
@@ -23,13 +23,13 @@ services:
     ports:
       - "3100:3100"
 
-  mimir:
-    image: grafana/mimir:latest
-    container_name: mimir
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
     command:
-      - "-config.file=/etc/mimir/demo.yaml"
+      - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
-      - "9009:9009"
+      - "9090:9090"
 
   tempo:
     image: grafana/tempo:latest
